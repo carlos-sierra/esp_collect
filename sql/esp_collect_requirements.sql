@@ -51,13 +51,13 @@ SPO OFF;
 SPO esp_requirements.csv APP;
 
 -- id
-SELECT 'collection_host', 'collection_key', 'category', 'data_element', 'source', 'instance_number', 'inst_id', 'value' FROM DUAL
+SELECT 'collection_host,collection_key,category,data_element,source,instance_number,inst_id,value' FROM DUAL
 /
 SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'collection_date', 'sysdate', 0, 0, TO_CHAR(SYSDATE, '&&ecr_date_format.') FROM DUAL
 /
-SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'awr_retention_days', 'dba_hist_snapshot', 0, 0,  ROUND(CAST(MAX(end_interval_time) AS DATE) - CAST(MIN(begin_interval_time) AS DATE), 3) FROM dba_hist_snapshot WHERE dbid = &&ecr_dbid.
+SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'awr_retention_days', 'dba_hist_snapshot', 0, 0,  ROUND(CAST(MAX(end_interval_time) AS DATE) - CAST(MIN(begin_interval_time) AS DATE), 1) FROM dba_hist_snapshot WHERE dbid = &&ecr_dbid.
 /
-SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'awr_retention_days', 'dba_hist_snapshot', instance_number, 0, ROUND(CAST(MAX(end_interval_time) AS DATE) - CAST(MIN(begin_interval_time) AS DATE), 3) FROM dba_hist_snapshot WHERE dbid = &&ecr_dbid. GROUP BY instance_number ORDER BY instance_number
+SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'awr_retention_days', 'dba_hist_snapshot', instance_number, 0, ROUND(CAST(MAX(end_interval_time) AS DATE) - CAST(MIN(begin_interval_time) AS DATE), 1) FROM dba_hist_snapshot WHERE dbid = &&ecr_dbid. GROUP BY instance_number ORDER BY instance_number
 /
 SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'user', 'user', 0, 0, USER FROM DUAL
 /
@@ -128,9 +128,9 @@ SELECT /*+ &&ecr_sq_fact_hints. */
        MEDIAN(aas_on_cpu_and_resmgr) aas_on_cpu_and_resmgr_median,
        MEDIAN(aas_on_cpu) aas_on_cpu_median,
        MEDIAN(aas_resmgr_cpu_quantum) aas_resmgr_cpu_quantum_median,
-       ROUND(AVG(aas_on_cpu_and_resmgr), 3) aas_on_cpu_and_resmgr_avg,
-       ROUND(AVG(aas_on_cpu), 3) aas_on_cpu_avg,
-       ROUND(AVG(aas_resmgr_cpu_quantum), 3) aas_resmgr_cpu_quantum_avg
+       ROUND(AVG(aas_on_cpu_and_resmgr), 1) aas_on_cpu_and_resmgr_avg,
+       ROUND(AVG(aas_on_cpu), 1) aas_on_cpu_avg,
+       ROUND(AVG(aas_resmgr_cpu_quantum), 1) aas_resmgr_cpu_quantum_avg
   FROM cpu_per_inst_and_sample
  GROUP BY
        instance_number
@@ -284,9 +284,9 @@ SELECT /*+ &&ecr_sq_fact_hints. */
        MEDIAN(aas_on_cpu_and_resmgr) aas_on_cpu_and_resmgr_median,
        MEDIAN(aas_on_cpu) aas_on_cpu_median,
        MEDIAN(aas_resmgr_cpu_quantum) aas_resmgr_cpu_quantum_median,
-       ROUND(AVG(aas_on_cpu_and_resmgr), 3) aas_on_cpu_and_resmgr_avg,
-       ROUND(AVG(aas_on_cpu), 3) aas_on_cpu_avg,
-       ROUND(AVG(aas_resmgr_cpu_quantum), 3) aas_resmgr_cpu_quantum_avg
+       ROUND(AVG(aas_on_cpu_and_resmgr), 1) aas_on_cpu_and_resmgr_avg,
+       ROUND(AVG(aas_on_cpu), 1) aas_on_cpu_avg,
+       ROUND(AVG(aas_resmgr_cpu_quantum), 1) aas_resmgr_cpu_quantum_avg
   FROM cpu_per_inst_and_sample
  GROUP BY
        inst_id
@@ -575,8 +575,8 @@ SELECT /*+ &&ecr_sq_fact_hints. */
 io_per_inst AS (
 SELECT /*+ &&ecr_sq_fact_hints. */
        instance_number,
-       ROUND(100 * SUM(r_reqs) / (SUM(r_reqs) + SUM(w_reqs)), 3) r_reqs_perc,
-       ROUND(100 * SUM(w_reqs) / (SUM(r_reqs) + SUM(w_reqs)), 3) w_reqs_perc,
+       ROUND(100 * SUM(r_reqs) / (SUM(r_reqs) + SUM(w_reqs)), 1) r_reqs_perc,
+       ROUND(100 * SUM(w_reqs) / (SUM(r_reqs) + SUM(w_reqs)), 1) w_reqs_perc,
        ROUND(MAX((r_reqs + w_reqs) / elapsed_sec)) rw_iops_peak,
        ROUND(MAX(r_reqs / elapsed_sec)) r_iops_peak,
        ROUND(MAX(w_reqs / elapsed_sec)) w_iops_peak,
@@ -601,8 +601,8 @@ SELECT /*+ &&ecr_sq_fact_hints. */
        ROUND(AVG((r_reqs + w_reqs) / elapsed_sec)) rw_iops_avg,
        ROUND(AVG(r_reqs / elapsed_sec)) r_iops_avg,
        ROUND(AVG(w_reqs / elapsed_sec)) w_iops_avg,
-       ROUND(100 * SUM(r_bytes) / (SUM(r_bytes) + SUM(w_bytes)), 3) r_bytes_perc,
-       ROUND(100 * SUM(w_bytes) / (SUM(r_bytes) + SUM(w_bytes)), 3) w_bytes_perc,
+       ROUND(100 * SUM(r_bytes) / (SUM(r_bytes) + SUM(w_bytes)), 1) r_bytes_perc,
+       ROUND(100 * SUM(w_bytes) / (SUM(r_bytes) + SUM(w_bytes)), 1) w_bytes_perc,
        ROUND(MAX((r_bytes + w_bytes) / POWER(2, 20) / elapsed_sec)) rw_mbps_peak,
        ROUND(MAX(r_bytes / POWER(2, 20) / elapsed_sec)) r_mbps_peak,
        ROUND(MAX(w_bytes / POWER(2, 20) / elapsed_sec)) w_mbps_peak,
@@ -634,8 +634,8 @@ SELECT /*+ &&ecr_sq_fact_hints. */
 ),
 io_per_cluster AS ( -- combined
 SELECT /*+ &&ecr_sq_fact_hints. */
-       ROUND(100 * SUM(r_reqs) / (SUM(r_reqs) + SUM(w_reqs)), 3) r_reqs_perc,
-       ROUND(100 * SUM(w_reqs) / (SUM(r_reqs) + SUM(w_reqs)), 3) w_reqs_perc,
+       ROUND(100 * SUM(r_reqs) / (SUM(r_reqs) + SUM(w_reqs)), 1) r_reqs_perc,
+       ROUND(100 * SUM(w_reqs) / (SUM(r_reqs) + SUM(w_reqs)), 1) w_reqs_perc,
        ROUND(MAX((r_reqs + w_reqs) / elapsed_sec)) rw_iops_peak,
        ROUND(MAX(r_reqs / elapsed_sec)) r_iops_peak,
        ROUND(MAX(w_reqs / elapsed_sec)) w_iops_peak,
@@ -660,8 +660,8 @@ SELECT /*+ &&ecr_sq_fact_hints. */
        ROUND(AVG((r_reqs + w_reqs) / elapsed_sec)) rw_iops_avg,
        ROUND(AVG(r_reqs / elapsed_sec)) r_iops_avg,
        ROUND(AVG(w_reqs / elapsed_sec)) w_iops_avg,
-       ROUND(100 * SUM(r_bytes) / (SUM(r_bytes) + SUM(w_bytes)), 3) r_bytes_perc,
-       ROUND(100 * SUM(w_bytes) / (SUM(r_bytes) + SUM(w_bytes)), 3) w_bytes_perc,
+       ROUND(100 * SUM(r_bytes) / (SUM(r_bytes) + SUM(w_bytes)), 1) r_bytes_perc,
+       ROUND(100 * SUM(w_bytes) / (SUM(r_bytes) + SUM(w_bytes)), 1) w_bytes_perc,
        ROUND(MAX((r_bytes + w_bytes) / POWER(2, 20) / elapsed_sec)) rw_mbps_peak,
        ROUND(MAX(r_bytes / POWER(2, 20) / elapsed_sec)) r_mbps_peak,
        ROUND(MAX(w_bytes / POWER(2, 20) / elapsed_sec)) w_mbps_peak,
