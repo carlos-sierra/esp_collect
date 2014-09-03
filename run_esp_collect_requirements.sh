@@ -14,7 +14,5 @@ ps -ef | grep pmo[n] | grep -v \+ASM | sed 's/.*mon_\(.*\)$/\1/' | while read IN
 
 EOF
 done
-mv -bf esp_requirements.csv backup
-mv -bf esp_requirements.log backup
-mv esp_requirements.zip esp_requirements_$(date +"%Y%m%d_%H%M%S").zip
-echo "End esp_collect_requirements."
+zip -qmT esp_requirements.zip esp_requirements.csv esp_requirements.log
+echo "End esp_collect_requirements. Output: esp_requirements.zip"
