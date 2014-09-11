@@ -1,4 +1,4 @@
-ESP_COLLECT v1410 (2014-08-13) by Carlos Sierra
+ESP_COLLECT v1411 (2014-09-11) by Carlos Sierra
 
 ESP_COLLECT is a "free to use" script that collects Oracle Database(s) Requirements
 from a Host. Since most of the metadata collected comes from DBA_HIST and ASH Views,
