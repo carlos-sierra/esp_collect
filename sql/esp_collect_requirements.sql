@@ -6,7 +6,7 @@
 --
 -- Author:      Carlos Sierra
 --
--- Version:     v1412 (2014/09/20)
+-- Version:     v1413 (2014/10/07)
 --
 -- Usage:       Collects Requirements from AWR and ASH views, thus it should only be
 --              executed on systems with the Oracle Diagnostics Pack license.
@@ -44,7 +44,7 @@ SELECT 'get_instance_number', TO_CHAR(instance_number) ecr_instance_number FROM 
 COL ecr_min_snap_id NEW_V ecr_min_snap_id;
 SELECT 'get_min_snap_id', TO_CHAR(MIN(snap_id)) ecr_min_snap_id FROM dba_hist_snapshot WHERE dbid = &&ecr_dbid.;
 COL ecr_collection_host NEW_V ecr_collection_host;
-SELECT 'get_collection_host', LOWER(SUBSTR(SYS_CONTEXT('USERENV', 'HOST'), 1, INSTR(SYS_CONTEXT('USERENV', 'HOST'), '.') - 1)) ecr_collection_host FROM DUAL;
+SELECT 'get_collection_host', LOWER(SUBSTR(SYS_CONTEXT('USERENV', 'HOST')||'.', 1, INSTR(SYS_CONTEXT('USERENV', 'HOST')||'.', '.') - 1)) ecr_collection_host FROM DUAL;
 
 DEF;
 SELECT 'get_current_time', TO_CHAR(SYSDATE, '&&ecr_date_format.') current_time FROM DUAL
@@ -63,9 +63,9 @@ SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'awr_retention_da
 /
 SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'user', 'user', 0, 0, USER FROM DUAL
 /
-SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'host', 'sys_context', 0, 0, SYS_CONTEXT('USERENV', 'HOST') FROM DUAL
+SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'host', 'sys_context', 0, 0, LOWER(SUBSTR(SYS_CONTEXT('USERENV', 'HOST')||'.', 1, INSTR(SYS_CONTEXT('USERENV', 'HOST')||'.', '.') - 1)) FROM DUAL
 /
-SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'server_host', 'sys_context', 0, 0, SYS_CONTEXT('USERENV', 'SERVER_HOST') FROM DUAL
+SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'server_host', 'sys_context', 0, 0, LOWER(SUBSTR(SYS_CONTEXT('USERENV', 'SERVER_HOST')||'.', 1, INSTR(SYS_CONTEXT('USERENV', 'SERVER_HOST')||'.', '.') - 1)) FROM DUAL
 /
 SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'dbid', 'v$database', 0, 0, '&&ecr_dbid.' FROM DUAL
 /
@@ -75,7 +75,7 @@ SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'db_unique_name',
 /
 SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'platform_name', 'v$database', 0, 0, platform_name FROM v$database
 /
-SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'host_name', 'gv$instance', instance_number, inst_id, host_name FROM gv$instance ORDER BY inst_id
+SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'host_name', 'gv$instance', instance_number, inst_id, LOWER(SUBSTR(host_name||'.', 1, INSTR(host_name||'.', '.') - 1)) FROM gv$instance ORDER BY inst_id
 /
 SELECT '&&ecr_collection_host.', '&&ecr_collection_key', 'id', 'version', 'gv$instance', instance_number, inst_id, version FROM gv$instance ORDER BY inst_id
 /
