@@ -9,9 +9,9 @@ Steps
 1. Connect to the Host as Oracle. Unzip esp_collect.zip, navigate to the root esp_collect 
    directory, and execute shell script provided:
 
-   # unzip esp_collect.zip
-   # cd esp_collect
-   # sh run_esp_collect_requirements.sh
+   $ unzip esp_collect.zip
+   $ cd esp_collect
+   $ sh run_esp_collect_requirements.sh
 
 Notes:
 1. To collect requirements from just one database execute then 
