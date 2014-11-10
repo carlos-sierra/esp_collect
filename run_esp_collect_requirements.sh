@@ -1,6 +1,5 @@
 # eSP collector
 echo "Start eSP collector."
-rm -f esp_requirements.zip
 for INST in $(ps axo cmd | grep ora_pmo[n] | sed 's/^ora_pmon_//' | grep -v 'sed '); do
         if [ $INST = "$( cat /etc/oratab | grep -v ^# | grep -v ^$ | awk -F: '{ print $1 }' | grep $INST )" ]; then
                 echo "$INST: instance name = db_unique_name (single instance database)"
@@ -31,5 +30,5 @@ connect / as sysdba
 EOF
 
 done
-zip -qmT esp_requirements.zip esp_requirements.csv esp_requirements.log
-echo "End eSP collector. Output: esp_requirements.zip"
+zip -qmT esp_output.zip esp_requirements_*.zip esp_requirements_*.csv esp_requirements_*.log
+echo "End eSP collector. Output: esp_output.zip"
