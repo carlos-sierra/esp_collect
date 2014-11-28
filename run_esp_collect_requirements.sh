@@ -30,5 +30,6 @@ connect / as sysdba
 EOF
 
 done
-zip -qmT esp_output.zip esp_requirements_*.zip esp_requirements_*.csv esp_requirements_*.log
+cat /proc/cpuinfo | grep -i name | sort | uniq >> cpuinfo_model_name.txt
+zip -qmT esp_output.zip esp_requirements_*.zip esp_requirements_*.csv esp_requirements_*.log cpuinfo_model_name.txt
 echo "End eSP collector. Output: esp_output.zip"
