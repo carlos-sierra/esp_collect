@@ -1,4 +1,4 @@
-# eSP collector
+# eSP collector for linux
 echo "Start eSP collector."
 for INST in $(ps axo cmd | grep ora_pmo[n] | sed 's/^ora_pmon_//' | grep -v 'sed '); do
         if [ $INST = "$( cat /etc/oratab | grep -v ^# | grep -v ^$ | awk -F: '{ print $1 }' | grep $INST )" ]; then
@@ -26,10 +26,11 @@ for INST in $(ps axo cmd | grep ora_pmo[n] | sed 's/^ora_pmon_//' | grep -v 'sed
 sqlplus -s /nolog <<EOF
 connect / as sysdba
 
+@sql/resources_requirements.sql
 @sql/esp_collect_requirements.sql
 EOF
 
 done
 cat /proc/cpuinfo | grep -i name | sort | uniq >> cpuinfo_model_name.txt
-zip -qmT esp_output.zip esp_requirements_*.zip esp_requirements_*.csv esp_requirements_*.log cpuinfo_model_name.txt
+zip -qmT esp_output.zip res_requirements_*.txt esp_requirements_*.csv cpuinfo_model_name.txt 
 echo "End eSP collector. Output: esp_output.zip"
