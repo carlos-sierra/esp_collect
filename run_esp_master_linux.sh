@@ -26,8 +26,7 @@ for INST in $(ps axo cmd | grep ora_pmo[n] | sed 's/^ora_pmon_//' | grep -v 'sed
 sqlplus -s /nolog <<EOF
 connect / as sysdba
 
-@sql/resources_requirements.sql
-@sql/esp_collect_requirements.sql
+@sql/esp_master.sql
 EOF
 
 done

@@ -26,8 +26,7 @@ for INST in $(ps -ef | grep ora_pmon | grep -v 'grep ' | awk -F '_' '{print $3}'
 sqlplus -s /nolog <<EOF
 connect / as sysdba
 
-@sql/resources_requirements.sql
-@sql/esp_collect_requirements.sql
+@sql/esp_master.sql
 EOF
 
 done
