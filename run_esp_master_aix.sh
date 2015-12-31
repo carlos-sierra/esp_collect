@@ -30,5 +30,10 @@ connect / as sysdba
 EOF
 
 done
-zip -qmT esp_output.zip res_requirements_*.txt esp_requirements_*.csv
+lsconf | grep Processor >> cpuinfo_model_name.txt
+zip -qmT esp_output.zip res_requirements_*.txt esp_requirements_*.csv cpuinfo_model_name.txt 
+
 echo "End eSP collector. Output: esp_output.zip"
+
+
+
