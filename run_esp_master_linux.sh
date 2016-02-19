@@ -31,7 +31,10 @@ connect / as sysdba
 EOF
 
 done
-cat /proc/cpuinfo | grep -i name | sort | uniq >> cpuinfo_model_name.txt
-zip -qmT esp_output.zip res_requirements_*.txt esp_requirements_*.csv cpuinfo_model_name.txt 
 
-echo "End eSP collector. Output: esp_output.zip"
+zip -qm esp_recycle_bin.zip cpuinfo_model_name_*.txt 
+zip -qm esp_recycle_bin.zip esp_requirements_*_*_*.csv 
+zip -qm esp_recycle_bin.zip res_requirements_*_*_*.txt 
+rm esp_recycle_bin.zip
+
+echo "End eSP collector. Output: esp_output_hostname_yyyymmdd.zip"
