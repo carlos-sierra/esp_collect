@@ -32,6 +32,7 @@ EOF
 done
 
 zip -qm esp_recycle_bin.zip cpuinfo_model_name_*.txt 
+zip -qm esp_recycle_bin.zip escp_*_*.csv 
 zip -qm esp_recycle_bin.zip esp_requirements_*_*_*.csv 
 zip -qm esp_recycle_bin.zip res_requirements_*_*_*.txt 
 rm esp_recycle_bin.zip
