@@ -1,5 +1,6 @@
-# eSP collector for aix
+# eSP collector for aix (2016-09-01)
 echo "Start eSP collector."
+
 for INST in $(ps -ef | grep ora_pmon | grep -v 'grep ' | awk -F '_' '{print $3}'); do
         if [ $INST = "$( cat /etc/oratab | grep -v ^# | grep -v ^$ | awk -F: '{ print $1 }' | grep $INST )" ]; then
                 echo "$INST: instance name = db_unique_name (single instance database)"
@@ -35,9 +36,10 @@ zip -qm esp_recycle_bin.zip cpuinfo_model_name_*.txt
 zip -qm esp_recycle_bin.zip escp_*_*.csv 
 zip -qm esp_recycle_bin.zip esp_requirements_*_*_*.csv 
 zip -qm esp_recycle_bin.zip res_requirements_*_*_*.txt 
+zip -qm esp_recycle_bin.zip features_use_*_*_*.txt 
 rm esp_recycle_bin.zip
 
-echo "End eSP collector. Output: esp_output_hostname_yyyymmdd.zip"
+echo "End eSP collector. Output: escp_output_hostname_yyyymmdd.zip"
 
 
 
