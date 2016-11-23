@@ -1,4 +1,5 @@
 # eSP collector for linux (2016-09-01)
+#!/bin/sh
 echo "Start eSP collector."
 
 type nawk 1>/dev/null 2>&1 && AWK=nawk || AWK=awk
